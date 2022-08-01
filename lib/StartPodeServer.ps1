@@ -21,8 +21,6 @@ Start-PodeServer -StatusPageExceptions Show {
          }
     }
 
-
-
     Add-PodeRoute -Method Post -Path '/api/record/:worksheetName' -ScriptBlock {
 
         $worksheetName = $WebEvent.Parameters['worksheetName']
