@@ -2,7 +2,10 @@ Import-Module Pode -MaximumVersion 2.99.99 -Force
 Import-Module Pode.Web.psm1 -Force
 Import-Module ImportExcel -Force
 
+
 Start-PodeServer -StatusPageExceptions Show {
+    Import-PodeModule -Path './common/utils.psm1'
+    Import-PodeModule -Path './config/local.psm1'
     Export-PodeModule -Name ImportExcel
 
 
@@ -14,7 +17,7 @@ Start-PodeServer -StatusPageExceptions Show {
        
         Write-PodeJsonResponse -Value @{ 
             'hello' = 'world';
-            'timestamp' = $timestamp;
+            'timestamp' = GetTimestamp;
          }
     }
 
@@ -23,7 +26,7 @@ Start-PodeServer -StatusPageExceptions Show {
     Add-PodeRoute -Method Post -Path '/api/record/:worksheetName' -ScriptBlock {
 
         $worksheetName = $WebEvent.Parameters['worksheetName']
-        $path = Join-Path (Get-PodeServerPath) "..\storage\$worksheetName.xlsx"
+        $path = Join-Path GetTemporaryFileSytemPath $worksheetName
         $records = foreach ($item in $WebEvent.Data){
             [ PSCustomObject ] $item 
         }
@@ -35,12 +38,13 @@ Start-PodeServer -StatusPageExceptions Show {
     }
 
     Add-PodeRoute -Method Get -Path '/api/read' -ScriptBlock {
-        Write-Host "read a list"
+        Write-Host "$to del" 
+        # read all lists"
 
 
-        $path = Join-Path (Get-PodeServerPath) '..\storage\neu.xlsx'
-        $Data = Import-Excel $path 
-        Write-PodeJsonResponse -Value @{ 'dataStat' = $Data; }
+        # $path = Join-Path (Get-PodeServerPath) '..\storage\neu.xlsx'
+        # $Data = Import-Excel $path 
+        Write-PodeJsonResponse -Value @{ 'status' = 'nyi'; }
 
 
     }
@@ -49,12 +53,10 @@ Start-PodeServer -StatusPageExceptions Show {
         Write-Host "read a list"
 
         $worksheetName = $WebEvent.Parameters['worksheetName']
-        $path = Join-Path (Get-PodeServerPath) "..\storage\$worksheetName.xlsx"
+        $path = Join-Path GetTemporaryFileSytemPath $worksheetName
         $Data = Import-Excel $path 
         Write-PodeJsonResponse -Value @{ 'dataStat' = $Data; }
 
 
     }
-
-
 }
