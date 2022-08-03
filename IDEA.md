@@ -18,7 +18,7 @@ Katagrapho is a verb meaning:
 
 I wanted the `plural` so I added the `s`  ( hence Records )
 
-Hence the URL http://katagraphos.net was chosen.  
+Hence the URL http://katagraphos.net was chosen. ($to_do: redirect to katagraphos.github.io???  ) 
 
 ### The .net suffix? 
 
