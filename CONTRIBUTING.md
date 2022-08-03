@@ -1,8 +1,8 @@
 # The Collaboration Rules
 
-1. Please don't push to main branch, create a feature or bug branch, push that and open a pull request. Any direct pushes to main is possible, but discourged and subject to `deletion` via rollback.
+1. Please don't push to the `main branch`, please create your own a feature or bug-fix branch off of the main branch, then, push that and then create a `Pull Request` Any direct pushes to main is possible, but stronly discourged and subject to `deletion` via rollback.
 
-1. Feel free to Open and Issue to report bugs or add a feature request
+1. Feel free to use GitHub's Issue to for general comments, report bugs or add a feature request
 
 1. Use Issues to discuss Pull Request motivations, accolades or reasons why things were not merged into main
 
