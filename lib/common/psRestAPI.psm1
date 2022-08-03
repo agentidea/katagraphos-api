@@ -1,4 +1,4 @@
-function GetTimestamp {
-    Get-Date -Format o | ForEach-Object { $_ -replace ":", "." }
-    
+function WriteExcel {
+    param($path) 
+    "wrote excel to $path"
 }

@@ -1,5 +1,7 @@
-# Development configuration
+function GetStorageRepoProject {
+    return 'agentidea'
+}
 
-function GetTemporaryFileSytemPath {
-    return Join-Path (Get-PodeServerPath) "..\temp_storage\"
+function GetStorageRepo {
+    return 'katagraphos-store'
 }
