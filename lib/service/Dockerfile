@@ -22,4 +22,4 @@ RUN pwsh -c "Install-Module Pode.Web -Force"
 
 
 # run the server
-CMD [ "pwsh", "-c", "cd /usr/src/app; ./excel.ps1" ]
+CMD [ "pwsh", "-c", "cd /usr/src/app; ./katagraphosRestAPI.ps1" ]
