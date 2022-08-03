@@ -30,11 +30,29 @@ This API is made possible by leveraging the following OpenSource PowerShell Modu
 1. [Pode](https://github.com/Badgerati/Pode.Web), authored by Matthew Kelly (aka Badgerati)
 
 
+### etc
+Why on earth was this named Katagraphos?
+
+[Read about is here](IDEA.md)
+
+---------------------
+------------
+
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
 
 
 ### Draft if a ever presentation
-
-## What you will learn
+blah blah blah brocure ware here
+#### What you will learn
 1. How to create, update and read records in Excel spreadsheets, using the `ImportExcel` PowerShell module.  
 1. Use Microsoft Excel password protection feature to secure your records.
 1. How to save and retrieve records using the PowerShell module, `PSAdvantage` to and from a GitHub repository.
