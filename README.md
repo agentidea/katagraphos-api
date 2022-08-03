@@ -33,7 +33,7 @@ This API is made possible by leveraging the following OpenSource PowerShell Modu
 ### etc
 Why on earth was this named Katagraphos?
 
-[Read about is here](IDEA.md)
+[Read all about it here](IDEA.md)
 
 ---------------------
 ------------
