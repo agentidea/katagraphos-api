@@ -1,31 +1,44 @@
-# Katagraphos - microservice business logic-server
+# Katagraphos - Store records with Excel Spreadsheets in GitHub 
 
-## powershell microservice
+Katagraphos is a PowerShell RESTful API microservice that facilitates writes and reads of Excel spreadsheets which are then stored in GitHub.  
 
-```text
-Intention is to manage records by writing to an excel document(s) in a folder called fullName.
-```
+`Excel` was chosen as a primary file format to store textual records as it is useful for:
 
-# Versoin control your data with Excel and GitHub
+1. Tabular data (lists, tables ... )
+1. Built in Authenticaion ( Optional Password protection )
+1. Graph Visulizations
+1. Pivot tables
+1. Numerous other Excel features such as ...?
 
+
+`GitHub as a datastore` was chosen as it has the following properties:
+
+1. Secure and Availible 
+1. Private or Public visibility
+1. Version control
+1. Free 
+1. Permanent 
+1. Owned and backed by Microsoft
+
+
+
+## Under the hood
+This API is made possible by leveraging the following OpenSource PowerShell Modules
+
+1. [ImportExcel](https://github.com/dfinke/ImportExcel), authored by Douglas Finke
+1. [PSAdvantage](https://github.com/dfinke/PSAdvantage), authored by Douglas Finke
+1. [Pode](https://github.com/Badgerati/Pode.Web), authored by Matthew Kelly (aka Badgerati)
+
+
+
+
+### Draft if a ever presentation
 
 ## What you will learn
-1. How to save records using the PowerShell Excel Module and store it in a GitHub repository.
-1. Use PowerShell with the PowerShell Pode Module to create a microservice that run's seamlessly in `Docker`
-1. Use Microsoft Excel to password protect to your directory in GitHub.
-1. Store your list via a Git commit and `push` to an existing GitHub Repo.
-1. Retrieve your data with a PowerShell microservice using and a React front end.
-1. Use Excel as your primary database, that you can upddate and download in order to centralize and share a singularity 
+1. How to create, update and read records in Excel spreadsheets, using the `ImportExcel` PowerShell module.  
+1. Use Microsoft Excel password protection feature to secure your records.
+1. How to save and retrieve records using the PowerShell module, `PSAdvantage` to and from a GitHub repository.
+1. Use the PowerShell `Pode` Module to create a RESTful API 
 
 
-
-### REST API
-
-    POST /record/userregistration  {"fullName":"Grant Steinfeld", "ownerSecret":"str0ng-P@ssword", "dateOfBirth":{"day":"02","month":"March","optionalYear":""}}
-
-    POST /record/new {"ListName":"ToDo" , "visibility":"private|public", "items":["learn ImportExcel", "learn PSAdvantage", "spin up REST API server in PowerShell, ? Pode? "], "Authentication":{fullName:Grant%20Steinfeld, dob=0302[1967],ownerSecret:str0ng-P@ssword}}  
-
-    GET /record/findOne?ListName=ToDo&fullName=Grant%20Steinfeld&dob=0302[1967]
-
-    GET /record/findAll?fullName=Grant%20Steinfeld&dob=0302[1967]&ownerSecret=str0ng-P@ssword
-
+1. How to manage your data by following along a demo using a simple webfront end (tbd - REACT ...)
