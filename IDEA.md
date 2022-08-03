@@ -14,6 +14,7 @@ Katagrapho is a verb meaning:
 * to draw forms or figures
 * to delineate
 * to mark
+* to record
 
 I wanted the `plural` so I added the `s`  ( hence Records )
 
