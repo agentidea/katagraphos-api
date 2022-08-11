@@ -2,8 +2,11 @@ Import-Module Pode -MaximumVersion 2.99.99 -Force
 Import-Module Pode.Web.psm1 -Force
 Import-Module ImportExcel -Force
 
+# Import-Module './common/utils.psm1'
+# Import-Module './config/local.psm1'
 
 Start-PodeServer -StatusPageExceptions Show {
+    
     Import-PodeModule -Path './common/utils.psm1'
     Import-PodeModule -Path './config/local.psm1'
     Export-PodeModule -Name ImportExcel
@@ -16,7 +19,7 @@ Start-PodeServer -StatusPageExceptions Show {
     Add-PodeRoute -Method Get -Path '/api/ping' -ScriptBlock {
        
         Write-PodeJsonResponse -Value @{ 
-            'hello' = 'world';
+            'company' = GetStorageRepoProject;
             'timestamp' = GetTimestamp;
          }
     }
@@ -29,8 +32,29 @@ Start-PodeServer -StatusPageExceptions Show {
             [ PSCustomObject ] $item 
         }
 
-       $records | Export-Excel -WorksheetName Log -TableName Log -Path $path
+        #https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/new-temporaryfile?view=powershell-7.2
+
+        $TempFile = New-TemporaryFile
+
+       $records | Export-Excel -WorksheetName Log -TableName Log -Path $TempFile
         
+       # check in to GitHub
+       # write to agentidea/katagraphos-store 
+       # use psadvantage
+       Import-PSAdvantageConfig /home/grantsteinfeld/dev/katagraphos.net/api/katagraphos-api/lib/config/config.ps1 # imports config with GitHub Access Token
+
+       $owner = GetStorageRepoProject
+       $reponame = GetStorageRepo
+
+  
+        $command = @'
+$url = 'https://raw.githubusercontent.com/dfinke/PSKit/master/sampleCsv/aapl.csv'
+$ts = (Get-Date).ToString("yyyyMMddHHmmss")
+Export-Excel -InputObject (Invoke-RestMethod $url | ConvertFrom-Csv) -Path "appl-$($ts).xlsx"
+'@
+
+Invoke-Advantage -owner $owner -reponame $reponame -template importexcel-powershell -command $command
+
        Write-PodeJsonResponse -Value @{ 'dataStat' = $path; }
 
     }

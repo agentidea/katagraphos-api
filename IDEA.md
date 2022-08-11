@@ -18,7 +18,9 @@ Katagrapho is a verb meaning:
 
 I wanted the `plural` so I added the `s`  ( hence Records )
 
-Hence the Domain name `katagraphos.net` was aquired. ($to_do: redirect to katagraphos.github.io???  ) 
+Hence the Domain name `katagraphos.net` was aquired. ($to_do: redirect to katagraphos.github.io???  )
+
+A fact or piece of evidence about the past, especially an account kept in writing.  [ref](https://www.wordhippo.com/what-is/another-word-for/record.html)
 
 ### The .net suffix? 
 
