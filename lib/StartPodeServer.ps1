@@ -107,14 +107,24 @@ Start-PodeServer -StatusPageExceptions Show {
 
     }
 
-    Add-PodeRoute -Method Get -Path '/api/read' -ScriptBlock {
-        Write-Host "$to del" 
-        # read all lists"
+    Add-PodeRoute -Method Get -Path '/api/records/:username' -ScriptBlock {
 
+        # read all lists for a given Katagraphos user
+        $username = $WebEvent.Parameters['username']
 
-        # $path = Join-Path (Get-PodeServerPath) '..\storage\neu.xlsx'
-        # $Data = Import-Excel $path 
-        Write-PodeJsonResponse -Value @{ 'status' = 'nyi'; }
+        # ref gh (GitHub CLI) 'api'
+        # https://cli.github.com/manual/gh_api
+
+        $owner = GetStorageRepoProject
+        $repo = GetStorageRepo
+        $path = "user_content/$username"
+
+        $env:GITHUB_TOKEN = GetGHtoken
+        $res = (gh api -H "Accept: application/vnd.github+json" "/repos/$owner/$repo/contents/$path")
+
+        $resObject = $res | ConvertFrom-Json
+
+        Write-PodeJsonResponse -Value @{ 'results' = $resObject; }
 
 
     }
