@@ -26,33 +26,51 @@ Start-PodeServer -StatusPageExceptions Show {
 
     Add-PodeRoute -Method Post -Path '/api/record/:worksheetName' -ScriptBlock {
 
+        $hamchunkshackpath = "/home/grantsteinfeld/dev/katagraphos.net/api/katagraphos-api/lib/temp_storage"
         $worksheetName = $WebEvent.Parameters['worksheetName']
-        $localFileSytem = Join-Path GetTemporaryFileSytemPath $worksheetName
+
+        #$to_do: Pester unit test this logic!!!
+        $worksheetNamePlusExt = $worksheetName
+        $excelExt = ".xlsx"
+        
+       
+        if ($worksheetName -cmatch '\.[^.]+$') {
+            # worksheetName has a file extesnion
+            $extension = $matches[0]
+            if ($extension -EQ $excelExt){
+                #good nothing to do
+            }
+            else
+            {
+                throw "odd file extension, $extension, either provide no extension, or use .xlsx"
+            }
+        }
+        else
+        {
+            #no ext add xlsx
+            $worksheetNamePlusExt = "$worksheetName.xlsx"
+        }
+        
+
+        $excelFileName = Join-Path $hamchunkshackpath $worksheetNamePlusExt
+
         $records = foreach ($item in $WebEvent.Data){
             [ PSCustomObject ] $item 
         }
 
+  
+        $records | Export-Excel -WorksheetName Log -TableName Log -Path $excelFileName
 
-        $records | Export-Excel -WorksheetName Log -TableName Log -Path $localFileSytem
+        write-host "saved local spreadsheet $worksheetNamePlusExt here ==> $localFileSytem"
 
-       
-
-        $owner = 'agentidea'
-        $repo = "katagraphos-store"
-        $repoPath = "user_content/Clara.Pup/$worksheetName"
-
-        #Import-PSAdvantageConfig /home/grantsteinfeld/dev/katagraphos.net/api/katagraphos-api/lib/config/config.ps1 # imports config with GitHub Access Token
-
-        $token = "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"
-
-
-
+        $owner = GetStorageRepoProject
+        $repo = GetStorageRepo
+        $repoPath = "user_content/Clara.Pup/$worksheetNamePlusExt"
+        $token = GetGHtoken
 
         #Excel is BLOB/ so - Encoding byte
 
-        #$excelFileName = "/Users/grantsteinfeld/Documents/dev/katagraphos.net/api/gh-api/salesData.xlsx"
-        $excelFileName = $localFileSytem
-        Write-Host $excelFileName
+
         $content64 = [convert]::ToBase64String((Get-Content -path $excelFileName -AsByteStream))
 
         $url = "https://api.github.com/repos/$owner/$repo/contents/$repoPath"
@@ -60,7 +78,7 @@ Start-PodeServer -StatusPageExceptions Show {
 
         $jsonBody = @"
         {
-        "message": "my commit message",
+        "message": "Upload Excel list ",
         "committer": {
             "name": "Grant Steinfeld",
             "email": "grant.steinfeld.tech@gmail.com"
@@ -69,7 +87,6 @@ Start-PodeServer -StatusPageExceptions Show {
         }
 "@
 
-
         $headers = @{
         Accept = "application/vnd.github+json"
         Authorization = "token $token"
@@ -77,12 +94,10 @@ Start-PodeServer -StatusPageExceptions Show {
 
         Invoke-RestMethod -Method Put -Uri $url -Headers $headers -ContentType "application/json" -Body $jsonBody
 
-
-# https://zeleskitech.com/2016/03/10/building-json-powershell-objects/
-
-     
-
-       Write-PodeJsonResponse -Value @{ 'dataLocal-Stat' = $path; }
+       Write-PodeJsonResponse -Value @{ 
+        
+        'repo':"$owner/$repo";
+        'repo_path' = $repoPath; }
 
     }
 
