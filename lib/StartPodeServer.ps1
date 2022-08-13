@@ -37,23 +37,44 @@ Start-PodeServer -StatusPageExceptions Show {
         $TempFile = New-TemporaryFile
 
        $records | Export-Excel -WorksheetName Log -TableName Log -Path $TempFile
+     
+        # check in to GitHub
+        # write to agentidea/katagraphos-store 
+        # use psadvantage
+       $defaultPath = "./custom"
         
-       # check in to GitHub
-       # write to agentidea/katagraphos-store 
-       # use psadvantage
+
+       $destFile = $defaultPath/$repoName/$TempFile
+       Copy-Item $TempFile $destFile
+
+       
        Import-PSAdvantageConfig /home/grantsteinfeld/dev/katagraphos.net/api/katagraphos-api/lib/config/config.ps1 # imports config with GitHub Access Token
 
        $owner = GetStorageRepoProject
-       $reponame = GetStorageRepo
+       $repoName = GetStorageRepo
+       $logPath = './logs'
+
+    Invoke-GHPush $repoName
+       $params = @{
+           owner    = $owner
+           reponame = $repoName
+           template = 'basic-powershell'
+           saveLogs = $logPath
+           command  = @'
+./$TempFile
+'@
+}
+ Invoke-Advantage @params
+
 
   
-        $command = @'
-$url = 'https://raw.githubusercontent.com/dfinke/PSKit/master/sampleCsv/aapl.csv'
-$ts = (Get-Date).ToString("yyyyMMddHHmmss")
-Export-Excel -InputObject (Invoke-RestMethod $url | ConvertFrom-Csv) -Path "appl-$($ts).xlsx"
-'@
+#         $command = @'
+# $url = 'https://raw.githubusercontent.com/dfinke/PSKit/master/sampleCsv/aapl.csv'
+# $ts = (Get-Date).ToString("yyyyMMddHHmmss")
+# Export-Excel -InputObject (Invoke-RestMethod $url | ConvertFrom-Csv) -Path "appl-$($ts).xlsx"
+# '@
 
-Invoke-Advantage -owner $owner -reponame $reponame -template importexcel-powershell -command $command
+# Invoke-Advantage -owner $owner -reponame $reponame -template importexcel-powershell -command $command
 
        Write-PodeJsonResponse -Value @{ 'dataStat' = $path; }
 
