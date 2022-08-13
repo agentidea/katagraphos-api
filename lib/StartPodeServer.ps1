@@ -61,7 +61,7 @@ Start-PodeServer -StatusPageExceptions Show {
   
         $records | Export-Excel -WorksheetName Log -TableName Log -Path $excelFileName
 
-        write-host "saved local spreadsheet $worksheetNamePlusExt here ==> $localFileSytem"
+        write-host "saved local spreadsheet $worksheetNamePlusExt here ==> $excelFileName"
 
         $owner = GetStorageRepoProject
         $repo = GetStorageRepo
@@ -76,9 +76,11 @@ Start-PodeServer -StatusPageExceptions Show {
         $url = "https://api.github.com/repos/$owner/$repo/contents/$repoPath"
 
 
+        $tim = GetTimestamp
+
         $jsonBody = @"
         {
-        "message": "Upload Excel list ",
+        "message": "Upload Excel list $tim",
         "committer": {
             "name": "Grant Steinfeld",
             "email": "grant.steinfeld.tech@gmail.com"
@@ -94,10 +96,14 @@ Start-PodeServer -StatusPageExceptions Show {
 
         Invoke-RestMethod -Method Put -Uri $url -Headers $headers -ContentType "application/json" -Body $jsonBody
 
+        #now lets delete that tmp file on local storage
+        Remove-Item -Path $excelFileName -Force
+
        Write-PodeJsonResponse -Value @{ 
         
-        'repo':"$owner/$repo";
-        'repo_path' = $repoPath; }
+        'repo'="$owner/$repo";
+        'repo_path' = $repoPath;
+        'time' = $tim }
 
     }
 
