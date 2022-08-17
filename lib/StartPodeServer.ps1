@@ -122,9 +122,22 @@ Start-PodeServer -StatusPageExceptions Show {
         $env:GITHUB_TOKEN = GetGHtoken
         $res = (gh api -H "Accept: application/vnd.github+json" "/repos/$owner/$repo/contents/$path")
 
-        $resObject = $res | ConvertFrom-Json
+        # $resObject = $res | ConvertFrom-Json
 
-        Write-PodeJsonResponse -Value @{ 'results' = $resObject; }
+        #stuff begin
+        $xlsx = @()
+        $res | ConvertFrom-Json | foreach-object { 
+            foreach ($property in $_.PSObject.Properties) {
+            # $x = $property.value.name -like "*.xlsx"
+            $xlsx += $property.value
+            }
+        }
+        #stuff end
+
+
+
+        Write-PodeJsonResponse -Value $xlsx
+        # Write-PodeJsonResponse -Value @{ 'results' = $xlsx; }
 
 
     }
