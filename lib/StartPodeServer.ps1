@@ -2,6 +2,11 @@ Import-Module Pode -MaximumVersion 2.99.99 -Force
 Import-Module Pode.Web.psm1 -Force
 Import-Module ImportExcel -Force
 
+$a = 40
+$a += 1
+$a++
+# Answer to life
+
 # Import-Module './common/utils.psm1'
 # Import-Module './config/local.psm1'
 
