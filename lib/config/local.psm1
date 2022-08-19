@@ -8,6 +8,6 @@ function GetStorageRepo {
 }
 
 function GetGHtoken {
-    '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'
+    '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'
 }
 

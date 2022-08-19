@@ -26,7 +26,7 @@ Start-PodeServer -StatusPageExceptions Show {
 
     Add-PodeRoute -Method Post -Path '/api/record/:worksheetName/:username' -ScriptBlock {
 
-       $worksheetName = $WebEvent.Parameters['worksheetName']
+        $worksheetName = $WebEvent.Parameters['worksheetName']
         $username = $WebEvent.Parameters['username']
         #$to_do: add username to this path vvv to prevent, rare unlikely hood of 
         # name collision
@@ -91,9 +91,19 @@ Start-PodeServer -StatusPageExceptions Show {
         }
 "@
 
-        Write-Host "JSON body begin"
-        Write-Host @jsonBodu
-        Write-Host "JSON body end"
+        try {
+            Write-Host "JSON body begin"
+            Write-Host @jsonBodu
+            Write-Host "JSON body end"
+        }
+        catch [System.Net.WebException],[System.IO.IOException] {
+            Write-Host "System.Net.WebException],[System.IO.IOException]"
+            Write-Host $_
+        }
+        catch {
+            "catch all"
+            Write-Host $_
+        }
 
         $headers = @{
             Accept = "application/vnd.github+json"
