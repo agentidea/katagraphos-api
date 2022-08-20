@@ -2,13 +2,13 @@ Import-Module Pode -MaximumVersion 2.99.99 -Force
 Import-Module Pode.Web.psm1 -Force
 Import-Module ImportExcel -Force
 
-# Import-Module './common/utils.psm1'
-# Import-Module './config/local.psm1'
-
 Start-PodeServer -StatusPageExceptions Show {
     
     Import-PodeModule -Path './common/utils.psm1'
     Import-PodeModule -Path './config/local.psm1'
+    Import-PodeModule -Path './config/local.psm1'
+    import-module './service/katagraphosRestAPI.psm1'
+
     Export-PodeModule -Name ImportExcel
 
 
@@ -32,38 +32,21 @@ Start-PodeServer -StatusPageExceptions Show {
         # name collision
         $hamchunkshackpath = "/home/grantsteinfeld/dev/katagraphos.net/api/katagraphos-api/lib/temp_storage"
         
-        #$to_do: Pester unit test this logic!!!
-        $worksheetNamePlusExt = $worksheetName
-        $excelExt = ".xlsx"
-        if ($worksheetName -cmatch '\.[^.]+$') {
-            # worksheetName has a file extesnion .xlsx
-            $extension = $matches[0]
-            if ($extension -EQ $excelExt){
-                #good nothing to do
-            }
-            else
-            {
-                throw "odd file extension, $extension, either provide no extension, or use .xlsx"
-            }
-        }
-        else
-        {
-            #no ext add xlsx
-            $worksheetNamePlusExt = "$worksheetName.xlsx"
-        }
+   
+        $worksheetNamePlusExt = InvokeFileExtensionChecker $worksheetName
         
-
         $excelFileName = Join-Path $hamchunkshackpath $worksheetNamePlusExt
 
+        Write-Host "excel file name is $excelFileName"
+
+        # Create PSCustormObject [] of items in a specific JSON array
+        # regard file 
+        # ../../expectedJSON.md
         $records = foreach ($item in $WebEvent.Data){
             [ PSCustomObject ] $item 
         }
 
   
-        $records | Export-Excel -WorksheetName Log -TableName Log -Path $excelFileName
-
-        write-host "saved local spreadsheet $worksheetNamePlusExt here ==> $excelFileName"
-
         $owner = GetStorageRepoProject
         write-host "owner is $owner"
         $repo = GetStorageRepo
@@ -91,31 +74,33 @@ Start-PodeServer -StatusPageExceptions Show {
         }
 "@
 
-        try {
-            Write-Host "JSON body begin"
-            Write-Host @jsonBodu
-            Write-Host "JSON body end"
-        }
-        catch [System.Net.WebException],[System.IO.IOException] {
-            Write-Host "System.Net.WebException],[System.IO.IOException]"
-            Write-Host $_
-        }
-        catch {
-            "catch all"
-            Write-Host $_
-        }
+        # Write-Host "Get-Member of jsonBody begin"
+        # $gmsg = Get-Member @jsonBody
+        # Write-Host @gmsg
+        # Write-Host "Get-Member of jsonBody begin"
 
+        Write-Host "JSON body begin"
+        Write-Host @jsonBody
+        Write-Host "JSON body end"
+
+ 
         $headers = @{
             Accept = "application/vnd.github+json"
             Authorization = "token $token"
         }
 
-        Write-Host "irm start"
-        Invoke-RestMethod -Method Put -Uri $url -Headers $headers -ContentType "application/json" -Body $jsonBody
-        Write-Host "irm end"
+        try {
+            Write-Host "irm start"
+            Invoke-RestMethod -Method Put -Uri $url -Headers $headers -ContentType "application/json" -Body $jsonBody
+            Write-Host "irm end"
+        }
+        catch {
+            "irm catch all"
+            Write-Host $_
+        }
 
-        Write-Host "now lets delete that tmp [ $excelFileName ] file on local storage"
-        Remove-Item -Path $excelFileName -Force
+        # Write-Host "now lets delete that tmp [ $excelFileName ] file on local storage"
+        # Remove-Item -Path $excelFileName -Force
 
        Write-PodeJsonResponse -Value @{ 
         'msg'="$username added file $excelFileName"

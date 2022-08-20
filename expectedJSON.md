@@ -29,22 +29,23 @@ Say you want to represnt a song, send a list to
 
   or maybe a short form
   ```JSON
-  [
-  {
-    "Title": "Living on the Ceiling",
-    "Album": "Happy Families",
-    "SongBy": "Blancmange",
-    "Year":"1982"
-  },
-
-  {
-    "Title": "Starman",
-    "Album": "The Rise and Fall of Ziggy Stardust and the Spiders from Mars",
-    "SongBy": "David Bowie",
-    "Year":"1972"
-  }
+  
+[
+    {
+        "Title": "Living on the Ceiling",
+        "Album": "Happy Families",
+        "SongBy": "Blancmange",
+        "Year":"1982"
+    },
+    {
+        "Title": "Starman",
+        "Album": "The Rise and Fall of Ziggy Stardust and the Spiders from Mars",
+        "SongBy": "David Bowie",
+        "Year":"1972"
+    }
 
 ]
+
 ```
 
 ANY record(s) using this format
