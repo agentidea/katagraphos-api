@@ -5,6 +5,7 @@
 name: Custom PowerShell Automation - with PowerShell Notebook Setup
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
