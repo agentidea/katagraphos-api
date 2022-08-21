@@ -5,6 +5,7 @@
 name: Custom PowerShell Automation - Python
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
