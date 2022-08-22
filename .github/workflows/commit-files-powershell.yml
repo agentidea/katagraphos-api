@@ -19,7 +19,7 @@ jobs:
         shell: pwsh
         run: |
           $target = ""        
-          while(!(Test-Path $target)) {"[$(Get-Date)] I've been waiting, for a boobus like you"; sleep 1
+          while(!(Test-Path $target)) {"[$(Get-Date)] I've been waiting, for a boobus like you"; sleep 1}
 
       - name: Commit and push
         uses: stefanzweifel/git-auto-commit-action@v4.2.0
