@@ -5,6 +5,7 @@
 name: Custom PowerShell Automation - Mac
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
