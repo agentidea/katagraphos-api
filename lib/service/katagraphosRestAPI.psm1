@@ -10,24 +10,22 @@ function GetPSScriptRoot
 }
 
 
-function InvokeFilechecker  {
+function Invoke-FileExtensionPrepper  {
  
-    # param($worksheetName , $fileExt = ".xlsx")
+    param($worksheetName , $fileExt = ".xlsx")
 
-    # if ($worksheetName -cmatch '\.[^.]+$') {
-    #     # worksheetName has a file extesnion .xlsx
-    #     $extension = $matches[0]
-    #     if ($extension -EQ $fileExt) {
-    #         #good nothing to do
-    #     }
-    #     else {
-    #         throw "odd file extension, $extension, either provide no extension, or use .xlsx"
-    #     }
-    # }
-    # else {
-    #     #no ext add xlsx
-    #     return "$worksheetName.xlsx"
-    # }
-
-    return "dox.xls"
+    if ($worksheetName -cmatch '\.[^.]+$') {
+        # worksheetName has a file extesnion .xlsx
+        $extension = $matches[0]
+        if ($extension -EQ $fileExt) {
+            #good nothing to do
+        }
+        else {
+            throw "odd file extension, $extension, either provide no extension, or use .xlsx"
+        }
+    }
+    else {
+        #no ext add xlsx
+        return "$worksheetName.xlsx"
+    }
 }

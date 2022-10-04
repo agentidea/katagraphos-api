@@ -34,7 +34,7 @@ Start-PodeServer -StatusPageExceptions Show {
         $hamchunkshackpath = "/home/grantsteinfeld/dev/katagraphos.net/api/katagraphos-api/lib/temp_storage"
         
    
-        $worksheetNamePlusExt = InvokeFileExtensionChecker $worksheetName
+        $worksheetNamePlusExt = Invoke-FileExtensionPrepper $worksheetName '.xlsx'
         
         $excelFileName = Join-Path $hamchunkshackpath $worksheetNamePlusExt
 

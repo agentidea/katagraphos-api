@@ -11,7 +11,7 @@ Describe "Test REST APIs plumbing and generalized functions" {
 
 Describe "Test file related functions" {
 
-    It "Should return the correct file name" {
-        InvokeFileExtensionChecker 'joy'| Should -BeExactly 'joy.xlsx'
+    It "Should return the file name with default extension" {
+        Invoke-FileExtensionPrepper 'joy'| Should -BeExactly 'joy.xlsx'
     }
 }
